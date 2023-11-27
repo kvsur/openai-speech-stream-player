@@ -1,3 +1,11 @@
+interface Options {
+  onPlaying?: () => void;
+  onPause?: () => void;
+  onChunkEnd?: () => void;
+  mimeType?: string;
+  audio?: HTMLAudioElement;
+}
+
 /**
  * @typedef {{ 
  *  onPlaying?: () => void; 
@@ -34,17 +42,16 @@ class SpeechPlayer {
   }
 
   /**
-   * @param { HTMLAudioElement } customAudioEl 
    * @param { Options } options
    */
   constructor(options?: Options) {
     if (options) {
-      this.audio = options.audio;
+      this.audio = options.audio || new Audio();
     } 
     this.options = options || {};
   }
 
-  static async *streamAsyncIterable(stream: ReadableStream) {
+  static async *streamAsyncIterable(stream: ReadableStream<Uint8Array>) {
     const reader = stream.getReader();
 
     try {
@@ -64,7 +71,6 @@ class SpeechPlayer {
     return new Promise((resolve, reject) => {
       this.destroyed = false;
       this.mediaSource = new MediaSource();
-      this.audio = this.audio || new Audio();
       this.audio.src = URL.createObjectURL(this.mediaSource);
       this.initResolve = resolve;
       this.mediaSource.addEventListener('sourceopen', this.sourceOpenHandle.bind(this));
@@ -122,7 +128,7 @@ class SpeechPlayer {
    * @param {Response} response 
    */
   async feedWithResponse(response: Response) {
-    for await (const chunk of SpeechPlayer.streamAsyncIterable(response.body)) {
+    for await (const chunk of SpeechPlayer.streamAsyncIterable(response.body as ReadableStream<Uint8Array>)) {
       this.feed(chunk);
     }
   }

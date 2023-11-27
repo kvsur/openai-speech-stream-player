@@ -1,5 +1,18 @@
+interface Options {
+    onPlaying?: () => void;
+    onPause?: () => void;
+    onChunkEnd?: () => void;
+    mimeType?: string;
+    audio?: HTMLAudioElement;
+}
 /**
- * @typedef {{ onPlaying?: () => void; onPause?: () => void; onChunkEnd?: () => void; mimeType?: string }} Options
+ * @typedef {{
+ *  onPlaying?: () => void;
+ *  onPause?: () => void;
+ *  onChunkEnd?: () => void;
+ *  mimeType?: string;
+ *  audio?: HTMLAudioElement
+ * }} Options
  */
 declare class SpeechPlayer {
     /** @type { HTMLAudioElement } */
@@ -21,11 +34,10 @@ declare class SpeechPlayer {
     get audio(): HTMLAudioElement;
     set audio(audio: HTMLAudioElement);
     /**
-     * @param { HTMLAudioElement } customAudioEl
      * @param { Options } options
      */
-    constructor(customAudioEl: HTMLAudioElement, options?: Options);
-    static streamAsyncIterable(stream: any): AsyncGenerator<any, void, unknown>;
+    constructor(options?: Options);
+    static streamAsyncIterable(stream: ReadableStream<Uint8Array>): AsyncGenerator<Uint8Array, void, unknown>;
     init(): Promise<unknown>;
     sourceOpenHandle(): void;
     /**
