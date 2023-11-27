@@ -1,6 +1,6 @@
 {
   "name": "openai-speech-stream-player",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "It's a player for play SSE streaming chunk from OpenAI audio speech API.",
   "main": "lib/index.js",
   "homepage": "https://github.com/kvsur/openai-speech-stream-player",

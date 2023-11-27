@@ -9,7 +9,8 @@ import { SpeechPlayer } from 'openai-speech-stream-player';
 
 async function main() {
   const audioEl = document.querySelector('audio');
-  const player = new SpeechPlayer(audioEl, {
+  const player = new SpeechPlayer({
+    audio: audioEl,
     onPlaying: () => {},
     onPause: () => {},
     onChunkEnd: () => {},
