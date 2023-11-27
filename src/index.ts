@@ -1,0 +1,1 @@
+export { SpeechPlayer } from './Player';

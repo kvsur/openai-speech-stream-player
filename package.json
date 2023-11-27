@@ -1,0 +1,12 @@
+{
+  "name": "openai-speech-stream-player",
+  "version": "1.0.1",
+  "description": "It's a player for play SSE streaming chunk from OpenAI audio speech API.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["OpenAI Audio", "Speech API", "stream", "player", "SSE", "stream chunk player"],
+  "author": "",
+  "license": "ISC"
+}
