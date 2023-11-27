@@ -2,5 +2,6 @@ interface Options {
   onPlaying?: () => void;
   onPause?: () => void;
   onChunkEnd?: () => void;
-  mimeType?: string
+  mimeType?: string;
+  audio?: HTMLAudioElement;
 }

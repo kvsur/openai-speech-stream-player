@@ -1,5 +1,11 @@
 /**
- * @typedef {{ onPlaying?: () => void; onPause?: () => void; onChunkEnd?: () => void; mimeType?: string }} Options
+ * @typedef {{ 
+ *  onPlaying?: () => void; 
+ *  onPause?: () => void; 
+ *  onChunkEnd?: () => void; 
+ *  mimeType?: string; 
+ *  audio?: HTMLAudioElement 
+ * }} Options
  */
 class SpeechPlayer {
   /** @type { HTMLAudioElement } */
@@ -31,14 +37,14 @@ class SpeechPlayer {
    * @param { HTMLAudioElement } customAudioEl 
    * @param { Options } options
    */
-  constructor(customAudioEl: HTMLAudioElement, options: Options = {}) {
-    if (customAudioEl) {
-      this.audio = customAudioEl;
-      this.options = options || {};
-    }
+  constructor(options?: Options) {
+    if (options) {
+      this.audio = options.audio;
+    } 
+    this.options = options || {};
   }
 
-  static async *streamAsyncIterable(stream) {
+  static async *streamAsyncIterable(stream: ReadableStream) {
     const reader = stream.getReader();
 
     try {
