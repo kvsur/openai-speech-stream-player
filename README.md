@@ -75,3 +75,43 @@ async function main() {
 }
 
 ```
+
+### Others
+
+1. how to deal stream chunk in NodeJs form OpenAI text-to-speech API?
+
+here is my solution(code with nestJs):
+
+```typescript
+import { Injectable, Logger } from '@nestjs/common';
+import type { SpeechParams } from 'src/service/audio/Audio';
+import type { Response } from 'express';
+import { GPTAudio } from '../service/audio/Audio';
+
+@Injectable()
+export class AudioService {
+  private readonly logger = new Logger(AudioService.name);
+  private readonly audio = new GPTAudio();
+
+  async speech(parmas: SpeechParams, res: Response): Promise<void> {
+    this.logger.log(`[AudioService speech]\n${JSON.stringify(parmas)}`);
+    res.setHeader('Content-Type', 'audio/mpeg');
+    const response = await this.audio.speech(parmas);
+    const body: NodeJS.ReadableStream = response.body as any;
+
+    if (!body.on || !body.read) {
+      throw new Error('unsupported "fetch" implementation');
+    }
+
+    body.on('readable', () => {
+      let chunk: string | Buffer;
+      while (null !== (chunk = body.read())) {
+        res.write(chunk);
+      }
+    });
+    body.on('close', () => {
+      res.end();
+    });
+  }
+}
+```
