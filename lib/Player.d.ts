@@ -50,8 +50,8 @@ declare class SpeechPlayer {
      * @param {Response} response
      */
     feedWithResponse(response: Response): Promise<void>;
-    play(): void;
-    pause(): void;
+    play(): Promise<boolean>;
+    pause(): Promise<boolean>;
     get paused(): boolean;
     get playing(): boolean;
     /**
