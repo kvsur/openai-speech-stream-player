@@ -133,12 +133,48 @@ class SpeechPlayer {
     }
   }
 
-  play() {
-    this.audio && this.audio.paused && this.audio.play();
+  play(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      try {
+        if (this.paused) {
+          this.audio.play();
+          const playHandle = () => {
+            resolve(true);
+            this.audio.removeEventListener('playing', playHandle);
+          };
+          this.audio.addEventListener('playing', playHandle);
+        } else {
+          // audio not exist or audio status is playing will resolve false result.
+          resolve(false);
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
-  pause() {
-    this.audio && !this.audio.paused && this.audio.play();
+  pause(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      try {
+        if (this.playing) {
+          this.audio.pause();
+          const pauseHandle = () => {
+            this.audio.removeEventListener('pause', pauseHandle);
+            resolve(true);
+          };
+          this.audio.addEventListener('pause', pauseHandle);
+          // puase event must be fired before setTimeout.
+          setTimeout(() => {
+            resolve(this.paused);
+          }, 0);
+        } else {
+          // audio not exist or audio status is paused will resolve false result.
+          resolve(false);
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   get paused() {
